@@ -42,7 +42,7 @@ button{
     height: 60px;
     margin: 10px;
     border-radius: 50%;
-    background: transparent;
+    background: fixed;
     color: #ffffff;
     font-size: 20px;
     box-shadow: -8px -8px 15px rgba(255, 255, 255, 0.1);
