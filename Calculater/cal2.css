@@ -5,8 +5,9 @@
     font-family: 'poppins', sans-serif;
 }
 body{
+    body{
     width: 100%;
-    width: 100vh;
+    height: 100vh;
     display: inline-block;
     justify-content: center;
     align-items: center;
