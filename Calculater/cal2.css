@@ -55,7 +55,7 @@ button{
     color: #6dee0a;
 }
 button:hover {
-    background-color: hsl(36, 2%, 53%);
+    background-color: hsl(34, 21%, 6%);
 }
 button:active {
     background-color: hsl(30, 5%, 35%);
