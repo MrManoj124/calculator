@@ -26,4 +26,5 @@ arr.forEach(button => {
             input.value=string;
         }
     })
+    
 })
