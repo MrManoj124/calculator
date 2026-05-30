@@ -14,3 +14,9 @@ function createSampleProject(projectName) {
     } else {
         console.log(`Project "${projectName}" already exists.`);
     }
+}
+
+// List of sample project names
+const sampleProjects = ['ProjectAlpha', 'ProjectBeta', 'ProjectGamma'];
+// Create sample projects
+sampleProjects.forEach(createSampleProject);
