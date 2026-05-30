@@ -20,3 +20,14 @@ function createSampleProject(projectName) {
 const sampleProjects = ['ProjectAlpha', 'ProjectBeta', 'ProjectGamma'];
 // Create sample projects
 sampleProjects.forEach(createSampleProject);
+
+// To run this script, use the command: node dummy.js
+
+
+// create a ProjectAlpha project
+createSampleProject('ProjectAlpha');
+// create a ProjectBeta project
+createSampleProject('ProjectBeta');
+// create a ProjectGamma project
+createSampleProject('ProjectGamma');
+
