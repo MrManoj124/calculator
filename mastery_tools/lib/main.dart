@@ -63,3 +63,14 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
+
+
+// Create Calculator tab
+class CalculatorTab extends StatefulWidget{
+  const CalculatorTab({super.key});
+
+  @override
+  State<CalculatorTab> createState() => _CalculatorTabState();
+}
+
+
