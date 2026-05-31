@@ -73,4 +73,31 @@ class CalculatorTab extends StatefulWidget{
   State<CalculatorTab> createState() => _CalculatorTabState();
 }
 
+class _CalculatorTabState extends State<CalculatorTab>{
+  String _expression = '';
+  String _display = '0';
 
+  void _onButtonPressed(String value) {
+    setState(() {
+      if (value == 'AC') {
+        _expression = '';
+        _display = '0';
+      } else if (value == 'DEL') {
+        if (_expression.isNotEmpty) {
+          _expression = _expression.substring(0, _expression.length - 1);
+          _display = _expression.isEmpty ? '0' : _expression;
+        }
+      } else if (value == '=') {
+        _evaluateExpression();
+      } else if (value == 'x^2') {
+        if (_expression.isNotEmpty) {
+          _expression = '($_expression)^2';
+          _display = _expression;
+        }
+      } else {
+        _expression += value;
+        _display = _expression;
+      }
+    });
+  }
+}
