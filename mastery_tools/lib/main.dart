@@ -197,4 +197,22 @@ class StopWatchTab extends StatefulWidget{
   State<StopwatchTab> createState() => _StopWatchTabState();
 }
 
-class 
+class _StopWatchTabState extends State<StopWatchtab>{
+  final StopWatch _stopwatch = Stopwatch();
+  Timer? _timer;
+  final List<String> _laps = [];
+
+  void _startTimer(){
+    if(!_stopwatch.isRunning){
+      _stopwatch.start();
+      _timer = Timer.periodic(const Duration(milliseconds: 30), (timer){
+        setState(() {});
+      });
+    }
+  }
+
+  
+
+
+
+}
