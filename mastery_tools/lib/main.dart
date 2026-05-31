@@ -140,4 +140,50 @@ class _CalculatorTabState extends State<CalculatorTab>{
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(20),
+          alignment: Alignment.centerRight,
+          child: Text(
+            _display,
+            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
+            maxLines: 1,
+          ),
+        ),
+        Expanded(
+          child: GridView.count(
+            crossAxisCount: 4,
+            padding: const EdgeInsets.all(10),
+            children: [
+              _buildButton('AC', bgColor: Colors.orange.shade50),
+              _buildButton('DEL', bgColor: Colors.orange.shade50),
+              _buildButton('('), _buildButton(')'),
+              _buildButton('sin(', bgColor: Colors.blue.shade50),
+              _buildButton('cos(', bgColor: Colors.blue.shade50),
+              _buildButton('tan(', bgColor: Colors.blue.shade50),
+              _buildButton('/', bgColor: Colors.blue.shade100, textColor: Colors.blue.shade900),
+              _buildButton('7'), _buildButton('8'), _buildButton('9'),
+              _buildButton('*', bgColor: Colors.blue.shade100, textColor: Colors.blue.shade900),
+              _buildButton('4'), _buildButton('5'), _buildButton('6'),
+              _buildButton('-', bgColor: Colors.blue.shade100, textColor: Colors.blue.shade900),
+              _buildButton('1'), _buildButton('2'), _buildButton('3'),
+              _buildButton('+', bgColor: Colors.blue.shade100, textColor: Colors.blue.shade900),
+              _buildButton('log(', bgColor: Colors.blue.shade50),
+              _buildButton('ln(', bgColor: Colors.blue.shade50),
+              _buildButton('sqrt(', bgColor: Colors.blue.shade50),
+              _buildButton('x^2', bgColor: Colors.blue.shade50),
+              _buildButton('pi', bgColor: Colors.blue.shade50),
+              _buildButton('e', bgColor: Colors.blue.shade50),
+              _buildButton('.'),
+              _buildButton('=', bgColor: const Color(0xFF0ea5e9), textColor: Colors.white),
+            
+          ),
+        ),
+      ],
+    );
+  }
 }
