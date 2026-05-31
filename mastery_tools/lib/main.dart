@@ -100,4 +100,28 @@ class _CalculatorTabState extends State<CalculatorTab>{
       }
     });
   }
+
+  void _evaluateExpression() {
+    try {
+      String evalStr = _expression
+          .replaceAll('pi', '3.14159265359')
+          .replaceAll('e', '2.71828182846')
+          .replaceAll('sqrt(', 'sqrt(');
+      
+      Parser p = Parser();
+      Expression exp = p.parse(evalStr);
+      ContextModel cm = ContextModel();
+      double eval = exp.evaluate(EvaluationType.REAL, cm);
+      
+      setState(() {
+        _display = eval.toStringAsFixed(6).replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+        _expression = _display;
+      });
+    } catch (e) {
+      setState(() {
+        _display = 'Error';
+        _expression = '';
+      });
+    }
+  }
 }
