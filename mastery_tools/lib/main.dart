@@ -226,6 +226,13 @@ class _StopWatchTabState extends State<StopWatchtab>{
       });
     }
 
+    void _recordLap(){
+      if(_stopwatch.isRunning){
+        setState(() {
+          _laps.insert(0, _formattedTime());
+        });
+      }
+    }
 
 
 }
