@@ -234,5 +234,16 @@ class _StopWatchTabState extends State<StopWatchtab>{
       }
     }
 
+    String _formattedTime(){
+      final int milli = _stopwatch.elapsedMilliseconds;
+      final int centi = (milli % 1000) ~/ 10;
+      final int sec = (milli ~/ 1000) % 60;
+      final int min = (milli ~/ 60000) % 60;
+      final int hr = milli ~/ 3600000;
+      return '${hr.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')} : ${sec.toString().padLeft(2, '0')}.${centi.toString().padLeft(2, '0')}';
+    }
+
+    @override 
+
 
 }
