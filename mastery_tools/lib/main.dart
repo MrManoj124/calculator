@@ -217,7 +217,14 @@ class _StopWatchTabState extends State<StopWatchtab>{
     setState(() {});
     }
 
-    
+    void _resetTimer(){
+      _stopwatch.reset();
+      _stopwatch.stop();
+      _timer?.cancel();
+      setState(() {
+        _laps.clear();
+      });
+    }
 
 
 
