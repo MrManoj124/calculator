@@ -217,38 +217,70 @@ class _StopWatchTabState extends State<StopWatchtab>{
     setState(() {});
     }
 
-    void _resetTimer(){
-      _stopwatch.reset();
-      _stopwatch.stop();
-      _timer?.cancel();
+  void _resetTimer(){
+    _stopwatch.reset();
+    _stopwatch.stop();
+    _timer?.cancel();
+    setState(() {
+      _laps.clear();
+    });
+  }
+
+  void _recordLap(){
+    if(_stopwatch.isRunning){
       setState(() {
-        _laps.clear();
+        _laps.insert(0, _formattedTime());
       });
     }
+  }
 
-    void _recordLap(){
-      if(_stopwatch.isRunning){
-        setState(() {
-          _laps.insert(0, _formattedTime());
-        });
-      }
-    }
+  String _formattedTime(){
+    final int milli = _stopwatch.elapsedMilliseconds;
+    final int centi = (milli % 1000) ~/ 10;
+    final int sec = (milli ~/ 1000) % 60;
+    final int min = (milli ~/ 60000) % 60;
+    final int hr = milli ~/ 3600000;
+    return '${hr.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')} : ${sec.toString().padLeft(2, '0')}.${centi.toString().padLeft(2, '0')}';
+  }
 
-    String _formattedTime(){
-      final int milli = _stopwatch.elapsedMilliseconds;
-      final int centi = (milli % 1000) ~/ 10;
-      final int sec = (milli ~/ 1000) % 60;
-      final int min = (milli ~/ 60000) % 60;
-      final int hr = milli ~/ 3600000;
-      return '${hr.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')} : ${sec.toString().padLeft(2, '0')}.${centi.toString().padLeft(2, '0')}';
-    }
+  @override 
+  void dispose(){
+    _timer?.cancel();
+    super.dispose();
+  }
 
-    @override 
-    void dispose(){
-      _timer?.cancel();
-      super.dispose();
-    }
-
-    
-
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 40),
+        Text(
+          _formattedTime(),
+          style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold, fontFeatures: [FontFeature.tabularFigures()]),
+        ),
+        const SizedBox(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(onPressed: _startTimer, child: const Text('Start')),
+            ElevatedButton(onPressed: _pauseTimer, child: const Text('Pause')),
+            ElevatedButton(onPressed: _resetTimer, child: const Text('Reset')),
+            ElevatedButton(onPressed: _recordLap, child: const Text('Lap')),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Expanded(
+          child: ListView.builder(
+            itemCount: _laps.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Text('Lap ${_laps.length - index}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                trailing: Text(_laps[index], style: const TextStyle(fontSize: 16, fontFeatures: [FontFeature.tabularFigures()])),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 }
