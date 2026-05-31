@@ -124,4 +124,20 @@ class _CalculatorTabState extends State<CalculatorTab>{
       });
     }
   }
+
+  Widget _buildButton(String text, {Color? bgColor, Color? textColor}) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bgColor ?? Colors.white,
+          foregroundColor: textColor ?? Colors.black87,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 1,
+        ),
+        onPressed: () => _onButtonPressed(text),
+        child: Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
 }
