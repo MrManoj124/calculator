@@ -33,4 +33,33 @@ class MainScreen extends StatefulWidget{
   State<MainScreen> createState() => _MainScreenState();
 } 
 
-class _MainScreenState
+class _MainScreenState extends State<MainScreen> {
+  int _currentIndex = 0;
+  final List<Widget> _tabs = [
+    const CalculatorTab(),
+    const StopwatchTab(),
+    const ConverterTab(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Mastery Tools', style: TextStyle(fontWeight: FontWeight.bold)),
+        backgroundColor: const Color(0xFF0ea5e9),
+        foregroundColor: Colors.white,
+      ),
+      body: _tabs[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        selectedItemColor: const Color(0xFF2563eb),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.calculate), label: 'Calculator'),
+          BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Stopwatch'),
+          BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: 'Converter'),
+        ],
+      ),
+    );
+  }
+}
