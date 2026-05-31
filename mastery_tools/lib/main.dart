@@ -244,6 +244,11 @@ class _StopWatchTabState extends State<StopWatchtab>{
     }
 
     @override 
+    void dispose(){
+      _timer?.cancel();
+      super.dispose();
+    }
 
+    
 
 }
