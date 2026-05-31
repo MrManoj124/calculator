@@ -180,7 +180,7 @@ class _CalculatorTabState extends State<CalculatorTab>{
               _buildButton('e', bgColor: Colors.blue.shade50),
               _buildButton('.'),
               _buildButton('=', bgColor: const Color(0xFF0ea5e9), textColor: Colors.white),
-            
+            ],
           ),
         ),
       ],
