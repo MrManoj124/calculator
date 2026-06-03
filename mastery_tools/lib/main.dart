@@ -310,4 +310,28 @@ class _ConverterTabState extends State<ConverterTab>{
     'weight':{'kg':1, 'g':0.001, 'mg':0.000001, 'lb':0.453592, 'oz':0.0283495},
   }; // create a map of unit types and their corresponding multipliers to convert to base unit
 
+  void _calculateConversion(){
+    double res = 0.0;
+    if(_selectedType == 'remperature'){
+      double celsius = _inputValue;
+      if(_fromUnit == 'F') celsius = (_inputValue -32) * (5/9);
+      if(_fromUnit == 'K') celsius = _inputValue - 273.15;
+
+      if(_toUnit == 'C')res = celsius;
+      else if(_toUnit == 'F') res = (celsius * (9/5) +32;
+      else res = celsius + 273.15;
+    }
+    else{
+      double fromUnit = _multipliers[_selectedType]![fromUnit]!;
+      double toMult = _multipliers[_selectedType]![_toUnit]!;
+      res = (_inputValue * fromUnit) / toMult;
+    }
+
+    setState(() {
+      _result = res.toStringAsFixed(6).replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+    });
+  } // create a function to calculate the conversion based on the selected type and units
+
+  
+
 } // create
