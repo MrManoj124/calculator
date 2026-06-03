@@ -284,3 +284,8 @@ class _StopWatchTabState extends State<StopWatchtab>{
     );
   }
 }
+
+// 3. Converter Tab
+class ConverterTab extends StatefulWidget{
+  const ConverterTab({super.key});
+} // create state for converter Tab
