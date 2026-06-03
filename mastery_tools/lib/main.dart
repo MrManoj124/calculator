@@ -305,6 +305,9 @@ class _ConverterTabState extends State<ConverterTab>{
     'temperature' : ['C', 'F', 'K'],
   }; // create a map of unit types and their corresponding units
 
-  
+  final map<String, Map<String, double>> _multipliers = {
+    'length':{'m': 1, 'km': 1000, 'cm' : 0.01, 'mm': 0.001, 'in': 0.0254 , 'ft': 0.3048, 'y': 0.9144, 'mi': 1609.344},
+    'weight':{'kg':1, 'g':0.001, 'mg':0.000001, 'lb':0.453592, 'oz':0.0283495},
+  }; // create a map of unit types and their corresponding multipliers to convert to base unit
 
 } // create
