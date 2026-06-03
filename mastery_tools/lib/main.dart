@@ -332,6 +332,10 @@ class _ConverterTabState extends State<ConverterTab>{
     });
   } // create a function to calculate the conversion based on the selected type and units
 
-  
+  @override
+  void initState(){
+    super.initState();
+    _calculateConversion();
+  } // initialize the state and calculate the initial conversion
 
 } // create
