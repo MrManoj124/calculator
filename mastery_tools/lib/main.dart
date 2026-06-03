@@ -419,3 +419,13 @@ class _ConverterTabState extends State<ConverterTab>{
 
 
 } // create the state for the converter tab
+
+
+
+// 4. GPA Calculator Tab (With Local Storage)
+class GPACalculatorTab extends StatefulWidget{
+  const GPACalculatorTab({super.key});
+
+  @override
+  State<GPACalculatorTab> createState) => _GPACalculatorPageState();
+} // create state for GPA Calculator Tab
