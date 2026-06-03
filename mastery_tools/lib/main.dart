@@ -418,4 +418,4 @@ class _ConverterTabState extends State<ConverterTab>{
   } // create a helper function to build a dropdown row with a label and a dropdown button for selecting the type of conversion, the from unit, and the to unit
 
 
-} // create
+} // create the state for the converter tab
