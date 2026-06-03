@@ -288,4 +288,23 @@ class _StopWatchTabState extends State<StopWatchtab>{
 // 3. Converter Tab
 class ConverterTab extends StatefulWidget{
   const ConverterTab({super.key});
+
+  @override
+  State<ConverterTab> createState() => _ConverterTabState();
 } // create state for converter Tab
+
+class _ConverterTabState extends State<ConverterTab>{
+  String _selectedType = 'length';
+  String _fromUnit = 'm';
+  String _toUnit = 'km';
+  String _inputValue = 1.0;
+
+  final Map<String, List<String >> _units = {
+    'length' : ['m', 'km', 'cm', 'mm', 'in', 'ft', 'yd', 'mi'],
+    'weight' : ['g', 'kg', 'mg', 'lb', 'oz'],
+    'temperature' : ['C', 'F', 'K'],
+  }; // create a map of unit types and their corresponding units
+
+  
+
+} // create
