@@ -338,4 +338,68 @@ class _ConverterTabState extends State<ConverterTab>{
     _calculateConversion();
   } // initialize the state and calculate the initial conversion
 
+
+  @override
+  Widget build(BuildContext context){
+    return Padding(
+      padding: const Edgeinsets.all(16.0),
+      child : Column(
+        children : [
+          _buildDropdownRow('Type', _units.keys.toList(), _selectedType, (val){
+            setState(() {
+              _selectedType = val!;
+              _fromUnit = _units[_selectedType]![0];
+              _toUnit = _units[_selectedType]![1 % _units[_selectedType]!.length];
+              _calculateConversion();
+            });
+          }),
+          const SizedBox(height : 15),
+          _buidDropdownRow('From', _units[_selectedType]!, _fromUnit, (val){
+            setState(() {_fromUnit = val!; _calculateConverion(); });
+          }),
+
+          const SizedBox(height : 15),
+          _buildDropdownRow('To', _units[_selectedType]!, _toUnit, (val){
+            setState(() {_toUnit = val!; _calcualateConversion(); });
+          }),
+           
+          const SizedBox(height : 15),
+          Row(
+            children : [
+              const SizedBox(width: 80, child : Text('Value', style : TextStyle(color : Colors.grey))), // This will give a label to the text field
+              Expanded(
+                child : TextField(
+                  keyboardType : TextInputType.number, // This will bring up the numeric keyboard on mobile devices
+                  decoration: const InputDecoration(border: outlineinputBorder()), // This will give a border to the text field
+                  onChanged : (val){
+                    setState(() {
+                      _inputValue = double.tryParse(val) ?? 0.0;
+                      _calculateConversion();
+                    });
+                  },
+                  ),
+              ), // This will allow the user to input the value they want to convert    
+            ], // This will create a row with a label and a text field for the user to input the value they want to convert
+          ),
+          const SizedBox(height: 30),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.blue.shade200),
+            ),
+            child: Text(
+              'Result: $_result',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ), // This will display the result of the conversion in a styled container
+          ), // This will create a container to display the result of the conversion with some styling
+        ], // This will create a column with all the dropdowns, text field, and result container
+      ), // This will create a column to hold all the widgets in the converter tab
+    ); // This will add padding around the entire column in the converter tab
+  } // build method for the converter tab
+
+  
 } // create
