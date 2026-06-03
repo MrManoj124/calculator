@@ -401,5 +401,21 @@ class _ConverterTabState extends State<ConverterTab>{
     ); // This will add padding around the entire column in the converter tab
   } // build method for the converter tab
 
-  
+  Widget _buildDropdownRow(String label, List<String> items, String currentValue, ValueChanged<String?> onChanged) {
+    return Row(
+      children: [
+        SizedBox(width: 80, child: Text(label, style: const TextStyle(color: Colors.grey))),
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: currentValue,
+            decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10)),
+            items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+            onChanged: onChanged,
+          ),// This will create a dropdown button with the given items and styling, and call the onChanged callback when a new value is selected 
+        ),// This will expand the dropdown button to fill the remaining space in the row
+      ], // This will create a row with a label and a dropdown button for selecting the type of conversion, the from unit, and the to unit
+    ); // This will create a row to hold the label and dropdown button for selecting the type of conversion, the from unit, and the to unit
+  } // create a helper function to build a dropdown row with a label and a dropdown button for selecting the type of conversion, the from unit, and the to unit
+
+
 } // create
