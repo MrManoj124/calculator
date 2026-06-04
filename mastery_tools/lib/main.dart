@@ -108,7 +108,8 @@ class _CalculatorTabState extends State<CalculatorTab>{
           .replaceAll('e', '2.71828182846')
           .replaceAll('sqrt(', 'sqrt(');
       
-      Parser p = Parser();
+      // Use ShuntingYardParser instead of deprecated Parser
+      final p = ShuntingYardParser();
       Expression exp = p.parse(evalStr);
       ContextModel cm = ContextModel();
       double eval = exp.evaluate(EvaluationType.REAL, cm);
@@ -190,34 +191,34 @@ class _CalculatorTabState extends State<CalculatorTab>{
 
 
 // 2. StopWatch Tab
-class StopWatchTab extends StatefulWidget{
-  const StopWatchTab({super.key});
+class StopwatchTab extends StatefulWidget {
+  const StopwatchTab({super.key});
 
   @override
-  State<StopwatchTab> createState() => _StopWatchTabState();
+  State<StopwatchTab> createState() => _StopwatchTabState();
 }
 
-class _StopWatchTabState extends State<StopWatchtab>{
-  final StopWatch _stopwatch = Stopwatch();
+class _StopwatchTabState extends State<StopwatchTab> {
+  final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   final List<String> _laps = [];
 
-  void _startTimer(){
-    if(!_stopwatch.isRunning){
+  void _startTimer() {
+    if (!_stopwatch.isRunning) {
       _stopwatch.start();
-      _timer = Timer.periodic(const Duration(milliseconds: 30), (timer){
+      _timer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
         setState(() {});
       });
     }
   }
 
-  void _pauseTimer(){
+  void _pauseTimer() {
     _stopwatch.stop();
     _timer?.cancel();
     setState(() {});
-    }
+  }
 
-  void _resetTimer(){
+  void _resetTimer() {
     _stopwatch.reset();
     _stopwatch.stop();
     _timer?.cancel();
@@ -226,25 +227,25 @@ class _StopWatchTabState extends State<StopWatchtab>{
     });
   }
 
-  void _recordLap(){
-    if(_stopwatch.isRunning){
+  void _recordLap() {
+    if (_stopwatch.isRunning) {
       setState(() {
         _laps.insert(0, _formattedTime());
       });
     }
   }
 
-  String _formattedTime(){
+  String _formattedTime() {
     final int milli = _stopwatch.elapsedMilliseconds;
     final int centi = (milli % 1000) ~/ 10;
     final int sec = (milli ~/ 1000) % 60;
     final int min = (milli ~/ 60000) % 60;
     final int hr = milli ~/ 3600000;
-    return '${hr.toString().padLeft(2, '0')} : ${min.toString().padLeft(2, '0')} : ${sec.toString().padLeft(2, '0')}.${centi.toString().padLeft(2, '0')}';
+    return '${hr.toString().padLeft(2, '0')}:${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}.${centi.toString().padLeft(2, '0')}';
   }
 
-  @override 
-  void dispose(){
+  @override
+  void dispose() {
     _timer?.cancel();
     super.dispose();
   }
@@ -286,66 +287,68 @@ class _StopWatchTabState extends State<StopWatchtab>{
 }
 
 // 3. Converter Tab
-class ConverterTab extends StatefulWidget{
+class ConverterTab extends StatefulWidget {
   const ConverterTab({super.key});
 
   @override
   State<ConverterTab> createState() => _ConverterTabState();
-} // create state for converter Tab
+}
 
-class _ConverterTabState extends State<ConverterTab>{
+class _ConverterTabState extends State<ConverterTab> {
   String _selectedType = 'length';
   String _fromUnit = 'm';
   String _toUnit = 'km';
-  String _inputValue = 1.0;
+  double _inputValue = 1.0;
+  String _result = '';
 
-  final Map<String, List<String >> _units = {
-    'length' : ['m', 'km', 'cm', 'mm', 'in', 'ft', 'yd', 'mi'],
-    'weight' : ['g', 'kg', 'mg', 'lb', 'oz'],
-    'temperature' : ['C', 'F', 'K'],
-  }; // create a map of unit types and their corresponding units
+  final Map<String, List<String>> _units = {
+    'length': ['m', 'km', 'cm', 'mm', 'in', 'ft', 'yd', 'mi'],
+    'weight': ['kg', 'g', 'mg', 'lb', 'oz'],
+    'temperature': ['C', 'F', 'K'],
+  };
 
-  final map<String, Map<String, double>> _multipliers = {
-    'length':{'m': 1, 'km': 1000, 'cm' : 0.01, 'mm': 0.001, 'in': 0.0254 , 'ft': 0.3048, 'y': 0.9144, 'mi': 1609.344},
-    'weight':{'kg':1, 'g':0.001, 'mg':0.000001, 'lb':0.453592, 'oz':0.0283495},
-  }; // create a map of unit types and their corresponding multipliers to convert to base unit
+  final Map<String, Map<String, double>> _multipliers = {
+    'length': {'m': 1, 'km': 1000, 'cm': 0.01, 'mm': 0.001, 'in': 0.0254, 'ft': 0.3048, 'yd': 0.9144, 'mi': 1609.344},
+    'weight': {'kg': 1, 'g': 0.001, 'mg': 0.000001, 'lb': 0.453592, 'oz': 0.0283495},
+  };
 
-  void _calculateConversion(){
+  void _calculateConversion() {
     double res = 0.0;
-    if(_selectedType == 'remperature'){
+    if (_selectedType == 'temperature') {
       double celsius = _inputValue;
-      if(_fromUnit == 'F') celsius = (_inputValue -32) * (5/9);
-      if(_fromUnit == 'K') celsius = _inputValue - 273.15;
+      if (_fromUnit == 'F') celsius = (_inputValue - 32) * (5 / 9);
+      if (_fromUnit == 'K') celsius = _inputValue - 273.15;
 
-      if(_toUnit == 'C')res = celsius;
-      else if(_toUnit == 'F') res = (celsius * (9/5) +32;
+      // ignore: curly_braces_in_flow_control_structures
+      if (_toUnit == 'C') res = celsius;
+      // ignore: curly_braces_in_flow_control_structures
+      else if (_toUnit == 'F') res = celsius * (9 / 5) + 32;
+      // ignore: curly_braces_in_flow_control_structures
       else res = celsius + 273.15;
-    }
-    else{
-      double fromUnit = _multipliers[_selectedType]![fromUnit]!;
+    } else {
+      double fromMult = _multipliers[_selectedType]![_fromUnit]!;
       double toMult = _multipliers[_selectedType]![_toUnit]!;
-      res = (_inputValue * fromUnit) / toMult;
+      res = (_inputValue * fromMult) / toMult;
     }
 
     setState(() {
       _result = res.toStringAsFixed(6).replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
     });
-  } // create a function to calculate the conversion based on the selected type and units
+  }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _calculateConversion();
-  } // initialize the state and calculate the initial conversion
-
+  }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const Edgeinsets.all(16.0),
-      child : Column(
-        children : [
-          _buildDropdownRow('Type', _units.keys.toList(), _selectedType, (val){
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          _buildDropdownRow('Type', _units.keys.toList(), _selectedType, (val) {
             setState(() {
               _selectedType = val!;
               _fromUnit = _units[_selectedType]![0];
@@ -353,33 +356,31 @@ class _ConverterTabState extends State<ConverterTab>{
               _calculateConversion();
             });
           }),
-          const SizedBox(height : 15),
-          _buidDropdownRow('From', _units[_selectedType]!, _fromUnit, (val){
-            setState(() {_fromUnit = val!; _calculateConverion(); });
+          const SizedBox(height: 15),
+          _buildDropdownRow('From', _units[_selectedType]!, _fromUnit, (val) {
+            setState(() { _fromUnit = val!; _calculateConversion(); });
           }),
-
-          const SizedBox(height : 15),
-          _buildDropdownRow('To', _units[_selectedType]!, _toUnit, (val){
-            setState(() {_toUnit = val!; _calcualateConversion(); });
+          const SizedBox(height: 15),
+          _buildDropdownRow('To', _units[_selectedType]!, _toUnit, (val) {
+            setState(() { _toUnit = val!; _calculateConversion(); });
           }),
-           
-          const SizedBox(height : 15),
+          const SizedBox(height: 15),
           Row(
-            children : [
-              const SizedBox(width: 80, child : Text('Value', style : TextStyle(color : Colors.grey))), // This will give a label to the text field
+            children: [
+              const SizedBox(width: 80, child: Text('Value:', style: TextStyle(color: Colors.grey))),
               Expanded(
-                child : TextField(
-                  keyboardType : TextInputType.number, // This will bring up the numeric keyboard on mobile devices
-                  decoration: const InputDecoration(border: outlineinputBorder()), // This will give a border to the text field
-                  onChanged : (val){
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(border: OutlineInputBorder()),
+                  onChanged: (val) {
                     setState(() {
                       _inputValue = double.tryParse(val) ?? 0.0;
                       _calculateConversion();
                     });
                   },
-                  ),
-              ), // This will allow the user to input the value they want to convert    
-            ], // This will create a row with a label and a text field for the user to input the value they want to convert
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 30),
           Container(
@@ -394,12 +395,12 @@ class _ConverterTabState extends State<ConverterTab>{
               'Result: $_result',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
-            ), // This will display the result of the conversion in a styled container
-          ), // This will create a container to display the result of the conversion with some styling
-        ], // This will create a column with all the dropdowns, text field, and result container
-      ), // This will create a column to hold all the widgets in the converter tab
-    ); // This will add padding around the entire column in the converter tab
-  } // build method for the converter tab
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
   Widget _buildDropdownRow(String label, List<String> items, String currentValue, ValueChanged<String?> onChanged) {
     return Row(
@@ -407,25 +408,17 @@ class _ConverterTabState extends State<ConverterTab>{
         SizedBox(width: 80, child: Text(label, style: const TextStyle(color: Colors.grey))),
         Expanded(
           child: DropdownButtonFormField<String>(
+            // ignore: deprecated_member_use
             value: currentValue,
             decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 10)),
             items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
             onChanged: onChanged,
-          ),// This will create a dropdown button with the given items and styling, and call the onChanged callback when a new value is selected 
-        ),// This will expand the dropdown button to fill the remaining space in the row
-      ], // This will create a row with a label and a dropdown button for selecting the type of conversion, the from unit, and the to unit
-    ); // This will create a row to hold the label and dropdown button for selecting the type of conversion, the from unit, and the to unit
-  } // create a helper function to build a dropdown row with a label and a dropdown button for selecting the type of conversion, the from unit, and the to unit
-
-
-} // create the state for the converter tab
+          ),
+        ),
+      ],
+    );
+  }
+}
 
 
 
-// 4. GPA Calculator Tab (With Local Storage)
-class GPACalculatorTab extends StatefulWidget{
-  const GPACalculatorTab({super.key});
-
-  @override
-  State<GPACalculatorTab> createState) => _GPACalculatorPageState();
-} // create state for GPA Calculator Tab
