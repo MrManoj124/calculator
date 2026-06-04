@@ -523,7 +523,50 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                               _saveData();
                             },
                           ), // This TextField allows the user to input the course name. It uses a TextEditingController initialized with the current course name and updates the _courses list and saves data whenever the text changes.
-                           // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              // Grade Dropdown
+                              Expanded(
+                                flex: 2,
+                                child: DropdownButton<double>(
+                                  value: _courses[index]['grade'],
+                                  isExpanded: true,
+                                  items: _gradeScale.entries.map((e) {
+                                    return DropdownMenuItem(value: e.value, child: Text(e.key));
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    setState(() => _courses[index]['grade'] = val);
+                                    _saveData();
+                                  },
+                                ), // This DropdownButton allows the user to select a grade for the course. It is populated with the entries from the _gradeScale map, and when a grade is selected, it updates the _courses list and saves the data.
+                              ), // This DropdownButton allows the user to select a grade for the course. It is populated with the entries from the _gradeScale map, and when a grade is selected, it updates the _courses list and saves the data.
+                              const SizedBox(width: 10),
+                              // Credits Field
+                              Expanded(
+                                child: TextField(
+                                  decoration: const InputDecoration(labelText: 'Credits'),
+                                  keyboardType: TextInputType.number,
+                                  controller: TextEditingController(text: _courses[index]['credits'].toString())
+                                    ..selection = TextSelection.collapsed(offset: _courses[index]['credits'].toString().length),
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _courses[index]['credits'] = int.tryParse(val) ?? 0;
+                                    });
+                                    _saveData();
+                                  },
+                                ), // This TextField allows the user to input the number of credits for the course. It is initialized with the current credits value and updates the _courses list and saves data whenever the text changes.
+                              ),
+                              // Delete Button
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  setState(() => _courses.removeAt(index));
+                                  _saveData();
+                                },
+                              ) // create an IconButton with a delete icon that allows the user to remove a course from the list. When pressed, it removes the course at the specified index from the _courses list and saves the updated data to SharedPreferences.
+                            ], // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
+                          ), // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
                         ], // The Column contains the course name TextField and a Row with the grade dropdown, credits field, and delete button for each course entry.
                       ),
                     ),
