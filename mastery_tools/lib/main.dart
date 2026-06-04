@@ -469,4 +469,10 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
   }// This function encodes the current _courses list into a JSON string and saves it to SharedPreferences under the key 'saved_gpa_courses'. It should be called whenever there are changes to the courses data to ensure that the latest information is saved.
 
 
+  void _addCourse() {
+    setState(() {
+      _courses.add({'name': '', 'grade': 4.0, 'credits': 3});
+    });
+    _saveData();
+  } // This function adds a new course with default values to the _courses list and then calls _saveData() to save the updated list to SharedPreferences.
 }
