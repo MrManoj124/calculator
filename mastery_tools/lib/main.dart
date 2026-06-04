@@ -575,7 +575,15 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
               ), // The ListView.builder creates a scrollable list of course entries based on the _courses list. Each entry is displayed as a Card containing the course name, grade selection, credits input, and a delete button.
             ),
             // Bottom Results Panel
-            
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50, 
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.blue.shade200)
+              ), // This Container serves as a bottom panel to display the calculated GPA and an option to add more courses. It is styled with a light blue background, rounded corners, and a border.
+              
+            ),
           ], // The main Column of the page contains the ListView of courses and a bottom Container that displays the GPA and an option to add more courses.
         ),
       ),
