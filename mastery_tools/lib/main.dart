@@ -582,11 +582,27 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(color: Colors.blue.shade200)
               ), // This Container serves as a bottom panel to display the calculated GPA and an option to add more courses. It is styled with a light blue background, rounded corners, and a border.
-              
+              child: Column(
+                children: [
+                  Text('Cumulative GPA: ${_calculateGPA()}', 
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF1f2937))
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton.icon(
+                    onPressed: _addCourse,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add Another Course'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0ea5e9),
+                      foregroundColor: Colors.white,
+                    ),
+                  ), // This ElevatedButton allows the user to add a new course entry to the list. When pressed, it calls the _addCourse function, which adds a new course with default values to the _courses list and saves the updated data to SharedPreferences.
+                ], // The Column contains a Text widget that displays the calculated GPA and an ElevatedButton that allows the user to add another course to the list.
+              ), // This Container serves as a bottom panel to display the calculated GPA and an option to add more courses. It is styled with a light blue background, rounded corners, and a border.
             ),
           ], // The main Column of the page contains the ListView of courses and a bottom Container that displays the GPA and an option to add more courses.
         ),
       ),
     ); // create a Scaffold with an AppBar titled "GPA Calculator" and a body that contains a ListView of course entries and a bottom panel to display the calculated GPA and an option to add more courses.
   } // The build method constructs the UI of the GPA Calculator page, including the AppBar, a ListView for managing courses, and a bottom panel for displaying the GPA and adding new courses.
-} // This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
+ // This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
