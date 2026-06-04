@@ -1,7 +1,11 @@
 // Import the packages and libraries
+import 'dart:ui';
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
+import 'package:shared_preferences/shared_preferences.dart' as sp;
+typedef SharedPreferences = sp.SharedPreferences;
 
 void main(){
   runApp(const MasteryToolsApp());
@@ -39,6 +43,8 @@ class _MainScreenState extends State<MainScreen> {
     const CalculatorTab(),
     const StopwatchTab(),
     const ConverterTab(),
+    const GPACalculatorPage(),
+     // Placeholder for GPA Calculator, replace with GPACalculatorPage() when implemented
   ];
 
   @override
@@ -54,10 +60,15 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
         selectedItemColor: const Color(0xFF2563eb),
+        unselectedItemColor: const Color.fromARGB(255, 120, 148, 207).withOpacity(0.6),
+        backgroundColor: Colors.white,
+        elevation: 8,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.calculate), label: 'Calculator'),
           BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Stopwatch'),
           BottomNavigationBarItem(icon: Icon(Icons.swap_horiz), label: 'Converter'),
+          BottomNavigationBarItem(icon: Icon(Icons.school),label: 'GPA'),
         ],
       ),
     );
@@ -91,7 +102,7 @@ class _CalculatorTabState extends State<CalculatorTab>{
         _evaluateExpression();
       } else if (value == 'x^2') {
         if (_expression.isNotEmpty) {
-          _expression = '($_expression)^2';
+          _expression = '($_expression)*( $_expression )';
           _display = _expression;
         }
       } else {
@@ -337,6 +348,11 @@ class _ConverterTabState extends State<ConverterTab> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _calculateConversion();
@@ -421,15 +437,15 @@ class _ConverterTabState extends State<ConverterTab> {
 }
 
 //  GPA Calculator Tab (With Local Storage)
-class GPACalculatorPage extends StatefulWidget{
+class GPACalculatorPage extends StatefulWidget {
   const GPACalculatorPage({super.key});
 
   @override
-  State<GPACalculatorPage> createState() => _GPACalculatorPage();
-}  // create a GPA Calculator page with the ability to add courses, calculate GPA, and save/load data using SharedPreferences.
+  State<GPACalculatorPage> createState() => _GPACalculatorPageState();
+}
 
-class _GPACalculatorPageState extends State<GPACalculatorPage>{
-  List<Map<String, dynamic>> _courses = [] ;
+class _GPACalculatorPageState extends State<GPACalculatorPage> {
+  List<Map<String, dynamic>> _courses = [];
 
   final Map<String, double> _gradeScale = {
     'A (4.0)': 4.0, 'A- (3.7)': 3.7, 'B+ (3.3)': 3.3,
@@ -438,43 +454,42 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
   };
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _loadSaveData(); // Load data when the page opens
-  } //  create a function to load saved data from SharedPreferences when the page initializes.
+    _loadSavedData(); // Load data when the page opens
+  }
 
-  // Storage Logic
-  Future<void> _loadSavedData() async{
+  // --- STORAGE LOGIC ---
+  Future<void> _loadSavedData() async {
     final prefs = await SharedPreferences.getInstance();
     final String? coursesJson = prefs.getString('saved_gpa_courses');
-
-    if(coursesJson != null){
+    
+    if (coursesJson != null) {
       final List<dynamic> decoded = jsonDecode(coursesJson);
       setState(() {
-        _courses = decoded.map((e) => Map<String, dynamic>.from(e)).toList(); 
-      }); // This will convert the JSON string back into a List of Maps and update the state to reflect the loaded courses.
-    } // If there is saved data, it decodes the JSON string and updates the _courses list with the loaded courses.
-    else{
-      // Default empty state if nothing is saved 
+        _courses = decoded.map((e) => Map<String, dynamic>.from(e)).toList();
+      });
+    } else {
+      // Default empty state if nothing is saved
       setState(() {
-        _courses = [{'name': '', 'grade' : 4.0, 'credits':3}];  _
+        _courses = [{'name': '', 'grade': 4.0, 'credits': 3}];
       });
     }
-  } // create a function to save the current courses data to SharedPreferences whenever changes are made, such as adding a course or updating grades/credits.
+  }
 
-  Future<void> _saveData() async{
-    final prefs = await SharePreferences.getInstance();
+  Future<void> _saveData() async {
+    final prefs = await SharedPreferences.getInstance();
     final String encoded = jsonEncode(_courses);
     await prefs.setString('saved_gpa_courses', encoded);
-  }// This function encodes the current _courses list into a JSON string and saves it to SharedPreferences under the key 'saved_gpa_courses'. It should be called whenever there are changes to the courses data to ensure that the latest information is saved.
-
+  }
+  // ---------------------
 
   void _addCourse() {
     setState(() {
       _courses.add({'name': '', 'grade': 4.0, 'credits': 3});
     });
     _saveData();
-  } // This function adds a new course with default values to the _courses list and then calls _saveData() to save the updated list to SharedPreferences.
+  }
 
   String _calculateGPA() {
     double totalPoints = 0;
@@ -482,19 +497,19 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
     for (var course in _courses) {
       totalPoints += (course['grade'] * course['credits']);
       totalCredits += (course['credits'] as int);
-    } // This loop iterates through each course in the _courses list, multiplying the grade by the credits to calculate the total points and summing up the total credits.
+    }
     if (totalCredits == 0) return '0.00';
     return (totalPoints / totalCredits).toStringAsFixed(2);
-  } // This function calculates the GPA by iterating through the _courses list, multiplying each course's grade by its credits to get total points, and summing up the total credits. It then divides total points by total credits to get the GPA and formats it to two decimal places.
+  }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('GPA Calculator'),
         backgroundColor: const Color(0xFF0ea5e9),
         foregroundColor: Colors.white,
-      ), // The AppBar is set with a title "GPA Calculator" and styled with a specific background color and white text.
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -515,14 +530,14 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                             decoration: const InputDecoration(
                               labelText: 'Course Name (e.g., Math 101)',
                               border: UnderlineInputBorder(),
-                            ), // This TextField allows the user to input the course name. It uses a TextEditingController initialized with the current course name and updates the _courses list and saves data whenever the text changes.
+                            ),
                             controller: TextEditingController(text: _courses[index]['name'])
                               ..selection = TextSelection.collapsed(offset: _courses[index]['name'].length),
                             onChanged: (val) {
                               _courses[index]['name'] = val;
                               _saveData();
                             },
-                          ), // This TextField allows the user to input the course name. It uses a TextEditingController initialized with the current course name and updates the _courses list and saves data whenever the text changes.
+                          ),
                           const SizedBox(height: 10),
                           Row(
                             children: [
@@ -539,8 +554,8 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                                     setState(() => _courses[index]['grade'] = val);
                                     _saveData();
                                   },
-                                ), // This DropdownButton allows the user to select a grade for the course. It is populated with the entries from the _gradeScale map, and when a grade is selected, it updates the _courses list and saves the data.
-                              ), // This DropdownButton allows the user to select a grade for the course. It is populated with the entries from the _gradeScale map, and when a grade is selected, it updates the _courses list and saves the data.
+                                ),
+                              ),
                               const SizedBox(width: 10),
                               // Credits Field
                               Expanded(
@@ -555,7 +570,7 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                                     });
                                     _saveData();
                                   },
-                                ), // This TextField allows the user to input the number of credits for the course. It is initialized with the current credits value and updates the _courses list and saves data whenever the text changes.
+                                ),
                               ),
                               // Delete Button
                               IconButton(
@@ -564,15 +579,15 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                                   setState(() => _courses.removeAt(index));
                                   _saveData();
                                 },
-                              ) // create an IconButton with a delete icon that allows the user to remove a course from the list. When pressed, it removes the course at the specified index from the _courses list and saves the updated data to SharedPreferences.
-                            ], // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
-                          ), // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
-                        ], // The Column contains the course name TextField and a Row with the grade dropdown, credits field, and delete button for each course entry.
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   );
                 },
-              ), // The ListView.builder creates a scrollable list of course entries based on the _courses list. Each entry is displayed as a Card containing the course name, grade selection, credits input, and a delete button.
+              ),
             ),
             // Bottom Results Panel
             Container(
@@ -581,7 +596,7 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                 color: Colors.blue.shade50, 
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(color: Colors.blue.shade200)
-              ), // This Container serves as a bottom panel to display the calculated GPA and an option to add more courses. It is styled with a light blue background, rounded corners, and a border.
+              ),
               child: Column(
                 children: [
                   Text('Cumulative GPA: ${_calculateGPA()}', 
@@ -596,13 +611,13 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
                       backgroundColor: const Color(0xFF0ea5e9),
                       foregroundColor: Colors.white,
                     ),
-                  ), // This ElevatedButton allows the user to add a new course entry to the list. When pressed, it calls the _addCourse function, which adds a new course with default values to the _courses list and saves the updated data to SharedPreferences.
-                ], // The Column contains a Text widget that displays the calculated GPA and an ElevatedButton that allows the user to add another course to the list.
-              ), // This Container serves as a bottom panel to display the calculated GPA and an option to add more courses. It is styled with a light blue background, rounded corners, and a border.
+                  ),
+                ],
+              ),
             ),
-          ], // The main Column of the page contains the ListView of courses and a bottom Container that displays the GPA and an option to add more courses.
+          ],
         ),
       ),
-    ); // create a Scaffold with an AppBar titled "GPA Calculator" and a body that contains a ListView of course entries and a bottom panel to display the calculated GPA and an option to add more courses.
-  } // The build method constructs the UI of the GPA Calculator page, including the AppBar, a ListView for managing courses, and a bottom panel for displaying the GPA and adding new courses.
+    );
+  }
 }// This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
