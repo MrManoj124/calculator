@@ -443,5 +443,22 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
     _loadSaveData(); // Load data when the page opens
   } //  create a function to load saved data from SharedPreferences when the page initializes.
 
-  
+  // Storage Logic
+  Future<void> _loadSavedData() async{
+    final prefs = await SharedPreferences.getInstance();
+    final String? coursesJson = prefs.getString('saved_gpa_courses');
+
+    if(coursesJson != null){
+      final List<dynamic> decoded = jsonDecode(coursesJson);
+      setState(() {
+        _courses = decoded.map((e) => Map<String, dynamic>.from(e)).toList(); 
+      }); // This will convert the JSON string back into a List of Maps and update the state to reflect the loaded courses.
+    } // If there is saved data, it decodes the JSON string and updates the _courses list with the loaded courses.
+    else{
+      // Default empty state if nothing is saved 
+      setState(() {
+        _courses = [{'name': '', 'grade' : 4.0, 'credits':3}];  _
+      });
+    }
+  } // create a function to save the current courses data to SharedPreferences whenever changes are made, such as adding a course or updating grades/credits.
 }
