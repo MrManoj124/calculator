@@ -475,4 +475,16 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
     });
     _saveData();
   } // This function adds a new course with default values to the _courses list and then calls _saveData() to save the updated list to SharedPreferences.
+
+  String _calculateGPA() {
+    double totalPoints = 0;
+    int totalCredits = 0;
+    for (var course in _courses) {
+      totalPoints += (course['grade'] * course['credits']);
+      totalCredits += (course['credits'] as int);
+    } // This loop iterates through each course in the _courses list, multiplying the grade by the credits to calculate the total points and summing up the total credits.
+    if (totalCredits == 0) return '0.00';
+    return (totalPoints / totalCredits).toStringAsFixed(2);
+  } // This function calculates the GPA by iterating through the _courses list, multiplying each course's grade by its credits to get total points, and summing up the total credits. It then divides total points by total credits to get the GPA and formats it to two decimal places.
+
 }
