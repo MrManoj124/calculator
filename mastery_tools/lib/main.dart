@@ -605,4 +605,4 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
       ),
     ); // create a Scaffold with an AppBar titled "GPA Calculator" and a body that contains a ListView of course entries and a bottom panel to display the calculated GPA and an option to add more courses.
   } // The build method constructs the UI of the GPA Calculator page, including the AppBar, a ListView for managing courses, and a bottom panel for displaying the GPA and adding new courses.
- // This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
+}// This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
