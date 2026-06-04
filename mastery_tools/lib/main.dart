@@ -487,4 +487,55 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
     return (totalPoints / totalCredits).toStringAsFixed(2);
   } // This function calculates the GPA by iterating through the _courses list, multiplying each course's grade by its credits to get total points, and summing up the total credits. It then divides total points by total credits to get the GPA and formats it to two decimal places.
 
-}
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('GPA Calculator'),
+        backgroundColor: const Color(0xFF0ea5e9),
+        foregroundColor: Colors.white,
+      ), // The AppBar is set with a title "GPA Calculator" and styled with a specific background color and white text.
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: _courses.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          // Course Name Field
+                          TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Course Name (e.g., Math 101)',
+                              border: UnderlineInputBorder(),
+                            ), // This TextField allows the user to input the course name. It uses a TextEditingController initialized with the current course name and updates the _courses list and saves data whenever the text changes.
+                            controller: TextEditingController(text: _courses[index]['name'])
+                              ..selection = TextSelection.collapsed(offset: _courses[index]['name'].length),
+                            onChanged: (val) {
+                              _courses[index]['name'] = val;
+                              _saveData();
+                            },
+                          ), // This TextField allows the user to input the course name. It uses a TextEditingController initialized with the current course name and updates the _courses list and saves data whenever the text changes.
+                           // This Row contains the grade dropdown, credits field, and delete button for each course entry, allowing the user to manage their courses effectively.
+                        ], // The Column contains the course name TextField and a Row with the grade dropdown, credits field, and delete button for each course entry.
+                      ),
+                    ),
+                  );
+                },
+              ), // The ListView.builder creates a scrollable list of course entries based on the _courses list. Each entry is displayed as a Card containing the course name, grade selection, credits input, and a delete button.
+            ),
+            // Bottom Results Panel
+            
+          ], // The main Column of the page contains the ListView of courses and a bottom Container that displays the GPA and an option to add more courses.
+        ),
+      ),
+    ); // create a Scaffold with an AppBar titled "GPA Calculator" and a body that contains a ListView of course entries and a bottom panel to display the calculated GPA and an option to add more courses.
+  } // The build method constructs the UI of the GPA Calculator page, including the AppBar, a ListView for managing courses, and a bottom panel for displaying the GPA and adding new courses.
+} // This class defines the state and UI for the GPA Calculator page, allowing users to add courses, input grades and credits, calculate their GPA, and save/load their data using SharedPreferences.
