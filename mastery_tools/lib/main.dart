@@ -461,4 +461,12 @@ class _GPACalculatorPageState extends State<GPACalculatorPage>{
       });
     }
   } // create a function to save the current courses data to SharedPreferences whenever changes are made, such as adding a course or updating grades/credits.
+
+  Future<void> _saveData() async{
+    final prefs = await SharePreferences.getInstance();
+    final String encoded = jsonEncode(_courses);
+    await prefs.setString('saved_gpa_courses', encoded);
+  }// This function encodes the current _courses list into a JSON string and saves it to SharedPreferences under the key 'saved_gpa_courses'. It should be called whenever there are changes to the courses data to ensure that the latest information is saved.
+
+
 }
