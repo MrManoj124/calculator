@@ -428,31 +428,7 @@ class GPACalculatorPage extends StatefulWidget{
   State<GPACalculatorPage> createState() => _GPACalculatorPage();
 }  // create a GPA Calculator page with the ability to add courses, calculate GPA, and save/load data using SharedPreferences.
 
-class _GPACalculatorPageState extends State<GPACalculatorPage>{
-  List<Map<String, dynamic>> _courses = [] ;
+ //  create a function to load saved data from SharedPreferences when the page initializes.
 
-  final Map<String, double> _gradeScale = {
-    'A (4.0)': 4.0, 'A- (3.7)': 3.7, 'B+ (3.3)': 3.3,
-    'B (3.0)': 3.0, 'B- (2.7)': 2.7, 'C+ (2.3)': 2.3,
-    'C (2.0)': 2.0, 'D (1.0)': 1.0, 'F (0.0)': 0.0,
-  };
-
-  @override
-  void initState(){
-    super.initState();
-    _loadSaveData(); // Load data when the page opens
-  }
-
-  // Storage Logic
-  Future<void> _loadSavedData() async{
-    final prefs = await SharedPreferences.getInstance();
-    final String? coursesJson = prefs.getString('saved_gpa_courses');
-
-    if(coursesJson != null){
-      final List<dynamic> decoded = jsonDecode(coursesJson);
-      setState(() {
-        _courses = decoded.map((e) => Map<String, dynamic>.from(e)).toList(); 
-      });
-    }
-  }
+  
 }
