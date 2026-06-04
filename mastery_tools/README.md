@@ -63,3 +63,23 @@ Connect your Android/iOS device, or start up a simulator/emulator. Then, run the
 
 Bash
 flutter run
+
+## ✨ New Features
+- **GPA Calculator (New Page):** Navigate to a dedicated calculation screen to track your academic performance.
+- **Advanced Navigation:** Features a hybrid navigation system where standard tools swap in place, while the GPA tool opens as a separate page with a native back button.
+
+## 🧮 How to Calculate GPA
+1. Tap the **GPA** icon in the bottom navigation bar.
+2. The app will navigate to a new screen.
+3. Select your **Letter Grade** from the dropdown.
+4. Enter the **Credit Hours** for that course.
+5. Click **Add Course** to include more subjects.
+6. The GPA updates automatically at the bottom.
+7. Use the **Back Arrow** in the top-left to return to the main dashboard.
+
+## 🚀 Setup Instructions
+1. Ensure Flutter is installed (`flutter doctor`).
+2. Clone the repository.
+3. Add the calculation dependency:
+   ```bash
+   flutter pub add math_expressions
