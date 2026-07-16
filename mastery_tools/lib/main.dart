@@ -17,7 +17,7 @@ class MasteryToolsApp extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      title:'Mastery Tools',
+      title:'GPA Calculator',
       theme:ThemeData(
         primaryColor: const Color(0xFF0ea5e9),
         scaffoldBackgroundColor: const Color(0xFFf8fbff),
@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mastery Tools', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('GPA Calculator', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF0ea5e9),
         foregroundColor: Colors.white,
       ),
